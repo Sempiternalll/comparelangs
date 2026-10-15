@@ -9,16 +9,21 @@ int fib(int n) {
 }
 
 void sieve(int limit) {
-    std::vector<bool> is_prime(limit+1, false);
-    for (int i = 2; i*i <= limit; i++)
-        if (!is_prime[i])
-            for (int j = i*i; j <= limit; j += i)
-                is_prime[j] = true;
+    // vector<char> یک بایت واقعی برای هر عنصر می‌سازد
+    // دسترسی مستقیم، بدون ماسک بیت
+    std::vector<char> is_prime(limit + 1, 0);
+    for (int i = 2; i * i <= limit; i++) {
+        if (!is_prime[i]) {
+            for (int j = i * i; j <= limit; j += i) {
+                is_prime[j] = 1;
+            }
+        }
+    }
 }
 
 int main() {
     auto start = std::chrono::high_resolution_clock::now();
-    volatile int r = fib(35);
+    volatile int r = fib(35);  // volatile تا کامپایلر حذفش نکند
     auto end = std::chrono::high_resolution_clock::now();
     double fib_time = std::chrono::duration<double, std::milli>(end - start).count();
 
